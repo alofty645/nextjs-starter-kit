@@ -154,6 +154,7 @@ async function handleCheckoutSessionCompleted(
   const metadata: any = session?.metadata;
 
   if (metadata?.subscription === "true") {
+    // This is for subscription payments
     const subscriptionId = session.subscription;
     try {
       await stripe.subscriptions.update(subscriptionId as string, { metadata });
@@ -182,6 +183,7 @@ async function handleCheckoutSessionCompleted(
       });
     }
   } else {
+    // This is for one-time payments
     const dateTime = new Date(session.created * 1000).toISOString();
     try {
       const { data: user, error: userError } = await supabase
@@ -205,7 +207,6 @@ async function handleCheckoutSessionCompleted(
         .from("payments")
         .insert([paymentData]);
       if (paymentsError) throw new Error("Error inserting payment");
-
       const updatedCredits =
         Number(user?.[0]?.credits || 0) + (session.amount_total || 0) / 100;
       const { data: updatedUser, error: userUpdateError } = await supabase
