@@ -1,16 +1,30 @@
-"use client"
+"use client";
 
-import ModeToggle from '@/components/mode-toggle'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogClose } from '@/components/ui/dialog'
-import { Separator } from '@/components/ui/separator'
-import { SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { UserProfile } from '@/components/user-profile'
-import config from '@/config'
-import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import { Banknote, Folder, HomeIcon, Settings } from 'lucide-react'
-import Link from 'next/link'
-import { ReactNode } from 'react'
+import ModeToggle from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogClose } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import {
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { UserProfile } from "@/components/user-profile";
+import config from "@/config";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { Banknote, Folder, HomeIcon, Settings } from "lucide-react";
+import Link from "next/link";
+import { ReactNode } from "react";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import {
+  ShoppingCart,
+  Package,
+  ShoppingBag,
+  Users,
+  LayoutDashboard,
+} from "lucide-react";
 
 export default function DashboardTopNav({ children }: { children: ReactNode }) {
   return (
@@ -33,24 +47,40 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
               <DialogClose asChild>
                 <Link href="/dashboard">
                   <Button variant="outline" className="w-full">
-                    <HomeIcon className="mr-2 h-4 w-4" />
-                    Home
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    Dashboard
                   </Button>
                 </Link>
               </DialogClose>
               <DialogClose asChild>
-                <Link href="/dashboard/projects">
+                <Link href="/dashboard/sales">
                   <Button variant="outline" className="w-full">
-                    <Folder className="mr-2 h-4 w-4" />
-                    Projects
+                    <ShoppingCart className="mr-2 h-4 w-4" />
+                    Sales
                   </Button>
                 </Link>
               </DialogClose>
               <DialogClose asChild>
-                <Link href="/dashboard/finance">
+                <Link href="/dashboard/inventory">
                   <Button variant="outline" className="w-full">
-                    <Banknote className="mr-2 h-4 w-4" />
-                    Finance
+                    <Package className="mr-2 h-4 w-4" />
+                    Inventory
+                  </Button>
+                </Link>
+              </DialogClose>
+              <DialogClose asChild>
+                <Link href="/dashboard/purchasing">
+                  <Button variant="outline" className="w-full">
+                    <ShoppingBag className="mr-2 h-4 w-4" />
+                    Purchasing
+                  </Button>
+                </Link>
+              </DialogClose>
+              <DialogClose asChild>
+                <Link href="/dashboard/contacts">
+                  <Button variant="outline" className="w-full">
+                    <Users className="mr-2 h-4 w-4" />
+                    Contacts
                   </Button>
                 </Link>
               </DialogClose>
@@ -66,6 +96,18 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
             </div>
           </SheetContent>
         </Dialog>
+
+        <div className="hidden sm:flex flex-1 items-center justify-center">
+          <div className="relative w-full max-w-sm">
+            <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search..."
+              className="pl-8 w-full"
+            />
+          </div>
+        </div>
+
         <div className="flex justify-center items-center gap-2 ml-auto">
           {config?.auth?.enabled && <UserProfile />}
           <ModeToggle />
@@ -73,5 +115,5 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
       </header>
       {children}
     </div>
-  )
+  );
 }

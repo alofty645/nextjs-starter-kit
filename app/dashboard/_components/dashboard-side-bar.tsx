@@ -1,79 +1,120 @@
-"use client"
+"use client";
 
-import { Separator } from '@/components/ui/separator'
-import clsx from 'clsx'
+import { Separator } from "@/components/ui/separator";
+import clsx from "clsx";
 import {
   Banknote,
   Folder,
   HomeIcon,
-  Settings
-} from "lucide-react"
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { FaTasks } from 'react-icons/fa'
+  Settings,
+  Package,
+  DollarSign,
+  FileText,
+  Users,
+  ShoppingCart,
+  ShoppingBag,
+  LayoutDashboard,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { FaTasks } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardSideBar() {
   const pathname = usePathname();
 
   return (
-    <div className="lg:block hidden border-r h-full">
-      <div className="flex h-full max-h-screen flex-col gap-2 ">
-        <div className="flex h-[55px] items-center justify-between border-b px-3 w-full">
-          <Link className="flex items-center gap-2 font-semibold ml-1" href="/">
+    <div className="lg:block hidden border-r h-full w-64">
+      <div className="flex h-full max-h-screen flex-col">
+        <div className="flex h-[55px] items-center border-b px-6">
+          <Link className="flex items-center gap-2 font-semibold" href="/">
             <span className="">Nextjs Starter Kit</span>
           </Link>
         </div>
-        <div className="flex-1 overflow-auto py-2 ">
+        <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-4 text-sm font-medium">
-            <Link
-              className={clsx("flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50", {
-                "flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50": pathname === "/dashboard"
-              })}
-              href="/dashboard"
-            >
-              <div className="border rounded-lg dark:bg-black dark:border-gray-800 border-gray-400 p-1 bg-white">
-                <HomeIcon className="h-3 w-3" />
-              </div>
-              Home
+            <Link href="/dashboard" className="w-full">
+              <Button
+                variant="ghost"
+                className={clsx(
+                  "w-full justify-start py-2 px-4",
+                  pathname === "/dashboard" && "bg-accent"
+                )}
+              >
+                <LayoutDashboard className="mr-2 h-4 w-4" />
+                Dashboard
+              </Button>
             </Link>
-            <Link
-              className={clsx("flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50", {
-                "flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50": pathname === "/dashboard/projects"
-              })}
-              href="/dashboard/projects"
-            >
-              <div className="border rounded-lg dark:bg-black dark:border-gray-800 border-gray-400 p-1 bg-white">
-                <Folder className="h-3 w-3" />
-              </div>
-              Projects
+
+            <Link href="/dashboard/sales" className="w-full">
+              <Button
+                variant="ghost"
+                className={clsx(
+                  "w-full justify-start py-2 px-4",
+                  pathname === "/dashboard/sales" && "bg-accent"
+                )}
+              >
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Sales
+              </Button>
             </Link>
-            <Link
-              className={clsx("flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50", {
-                "flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50": pathname === "/dashboard/finance"
-              })}
-              href="/dashboard/finance"
-            >
-              <div className="border rounded-lg dark:bg-black dark:border-gray-800 border-gray-400 p-1 bg-white">
-                <Banknote className="h-3 w-3" />
-              </div>
-              Finance
+
+            <Link href="/dashboard/inventory" className="w-full">
+              <Button
+                variant="ghost"
+                className={clsx(
+                  "w-full justify-start py-2 px-4",
+                  pathname === "/dashboard/inventory" && "bg-accent"
+                )}
+              >
+                <Package className="mr-2 h-4 w-4" />
+                Inventory
+              </Button>
             </Link>
-            <Separator className="my-3" />
-            <Link
-              className={clsx("flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50", {
-                "flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50": pathname === "/dashboard/settings"
-              })}
-              href="/dashboard/settings"
-              id="onboarding"
-            >
-              <div className="border rounded-lg dark:bg-black dark:border-gray-800 border-gray-400 p-1 bg-white">
-                <Settings className="h-3 w-3" />
-              </div>
-              Settings
+
+            <Link href="/dashboard/purchasing" className="w-full">
+              <Button
+                variant="ghost"
+                className={clsx(
+                  "w-full justify-start py-2 px-4",
+                  pathname === "/dashboard/purchasing" && "bg-accent"
+                )}
+              >
+                <ShoppingBag className="mr-2 h-4 w-4" />
+                Purchasing
+              </Button>
+            </Link>
+
+            <Link href="/dashboard/contacts" className="w-full">
+              <Button
+                variant="ghost"
+                className={clsx(
+                  "w-full justify-start py-2 px-4",
+                  pathname === "/dashboard/contacts" && "bg-accent"
+                )}
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Contacts
+              </Button>
+            </Link>
+
+            <Separator className="my-4" />
+
+            <Link href="/dashboard/settings" id="onboarding" className="w-full">
+              <Button
+                variant="ghost"
+                className={clsx(
+                  "w-full justify-start py-2 px-4",
+                  pathname === "/dashboard/settings" && "bg-accent"
+                )}
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </Button>
             </Link>
           </nav>
         </div>
       </div>
     </div>
-  )
+  );
 }
