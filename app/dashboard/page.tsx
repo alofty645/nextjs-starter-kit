@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
   Card,
   CardContent,
@@ -13,18 +12,6 @@ import { Button } from "@/components/ui/button";
 import { BarChartBetter } from "./_components/bar-chart-better";
 
 export default async function Dashboard() {
-=======
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowUpRight } from 'lucide-react'
-import Link from 'next/link'
-import { BarChartComponent } from './_components/bar-chart'
-import { BarChartBetter } from './_components/bar-chart-better'
-
-export default async function Dashboard() {
-
-
->>>>>>> a9606ea695ea0ab77d13d25056cc375a34b4b58e
   return (
     <div className="flex flex-col justify-center items-start flex-wrap px-4 pt-4 gap-4">
       <Card className="w-[20rem]">

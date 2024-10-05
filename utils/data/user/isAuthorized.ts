@@ -7,56 +7,58 @@ import { createServerClient } from "@supabase/ssr";
 export const isAuthorized = async (
   userId: string
 ): Promise<{ authorized: boolean; message: string }> => {
-  const result = await clerkClient.users.getUser(userId);
-
-  if (!result) {
-    return {
-      authorized: false,
-      message: "User not found",
-    };
-  }
-
-  const cookieStore = cookies();
-
-  const supabase = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-
   try {
-    const { data, error } = await supabase
-      .from("subscriptions")
-      .select("*")
-      .eq("user_id", userId);
+    const user = await clerkClient.users.getUser(userId);
 
-    if (error?.code)
+    if (!user) {
       return {
         authorized: false,
-        message: error.message,
-      };
-
-    if (data && data[0].status === "active") {
-      return {
-        authorized: true,
-        message: "User is subscribed",
+        message: "User not found",
       };
     }
 
+    const cookieStore = cookies();
+
+    const supabase = createServerClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value;
+          },
+        },
+      }
+    );
+
+    const { data, error } = await supabase
+      .from("subscriptions")
+      .select("status")
+      .eq("user_id", userId)
+      .single();
+
+    if (error) {
+      if (error.code === "PGRST116") {
+        return {
+          authorized: false,
+          message: "User has no subscription",
+        };
+      }
+      throw error;
+    }
+
     return {
-      authorized: false,
-      message: "User is not subscribed",
+      authorized: data.status === "active",
+      message:
+        data.status === "active"
+          ? "User is subscribed"
+          : "User is not subscribed",
     };
   } catch (error: any) {
+    console.error("Error checking authorization:", error);
     return {
       authorized: false,
-      message: error.message,
+      message: "Error checking authorization status",
     };
   }
 };

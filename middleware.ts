@@ -1,38 +1,27 @@
+import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import config from "./config";
 
-let clerkMiddleware: (arg0: (auth: any, req: any) => any) => { (arg0: any): any; new(): any; }, createRouteMatcher;
+export default clerkMiddleware({
+  publicRoutes: ["/", "/api/payments/webhook", "/api/auth/webhook"],
+  afterAuth(auth, req) {
+    if (!auth.userId && !auth.isPublicRoute) {
+      return auth.isApiRoute
+        ? new NextResponse("Unauthorized", { status: 401 })
+        : NextResponse.redirect(new URL("/sign-in", req.url));
+    }
 
-if (config.auth.enabled) {
-  try {
-    ({ clerkMiddleware, createRouteMatcher } = require("@clerk/nextjs/server"));
-  } catch (error) {
-    console.warn("Clerk modules not available. Auth will be disabled.");
-    config.auth.enabled = false;
-  }
-}
-
-const isProtectedRoute = config.auth.enabled
-  ? createRouteMatcher(["/dashboard(.*)"])
-  : () => false;
-
-export default function middleware(req: any) {
-  if (config.auth.enabled) {
-    return clerkMiddleware((auth, req) => {
-      if (!auth().userId && isProtectedRoute(req)) {
-        return auth().redirectToSignIn();
-      } else {
-        return NextResponse.next();
+    if (auth.userId && !auth.isPublicRoute) {
+      const isProtectedRoute = req.nextUrl.pathname.startsWith("/dashboard");
+      if (isProtectedRoute && !config.auth.enabled) {
+        return NextResponse.redirect(new URL("/", req.url));
       }
-    })(req);
-  } else {
+    }
+
     return NextResponse.next();
-  }
-}
+  },
+});
 
 export const middlewareConfig = {
-  matcher: [
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
